@@ -20,15 +20,19 @@ test	movwf	0x06, ACCESS	    ; Test for end of loop condition
 	
 	MOVLW   0x10
 	MOVWF   0x20, ACCESS
-	call    delay
-	
-	GOTO    count
-	
-delay	DECFSZ  0x20, F, ACCESS
-	BRA     delay
-	RETURN  0
+	MOVWF   0x30, ACCESS
+	call    delay1
 	
 count	bra 	loop		    ; Not yet finished goto start of loop again
 	goto 	0x0		    ; Re-run program from start
+	
+delay1	DECFSZ  0x20, F, ACCESS
+        CALL    delay2
+	BRA     delay1
+	RETURN  0
+	
+delay2  DECFSZ  0x30, F, ACCESS
+	BRA     delay2
+	RETURN  0
 	
 	end
