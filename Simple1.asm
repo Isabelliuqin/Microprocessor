@@ -13,10 +13,22 @@ start
 
 loop	movff 	0x06, PORTC
 	incf 	0x06, W, ACCESS
+	
 test	movwf	0x06, ACCESS	    ; Test for end of loop condition
 	movlw 	0x63
 	cpfsgt 	0x06, ACCESS
-	bra 	loop		    ; Not yet finished goto start of loop again
+	
+	MOVLW   0x10
+	MOVWF   0x20, ACCESS
+	call    delay
+	
+	GOTO    count
+	
+delay	DECFSZ  0x20, F, ACCESS
+	BRA     delay
+	RETURN  0
+	
+count	bra 	loop		    ; Not yet finished goto start of loop again
 	goto 	0x0		    ; Re-run program from start
 	
 	end
